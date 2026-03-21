@@ -1,190 +1,168 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, Github, Zap, Brain, Globe, Database, Cpu, Shield } from "lucide-react"
+"use client"
 
-const projects = [
+import type React from "react"
+import { useSectionReveal } from "@/hooks/use-section-reveal"
+import {
+  TimelineBody,
+  TimelineBulletList,
+  TimelineDate,
+  TimelineEntry,
+  TimelineLinks,
+  TimelineMeta,
+  TimelinePrimary,
+  TimelineRole,
+  TimelineTags,
+} from "@/components/profile-timeline"
+
+type Project = {
+  title: string
+  category: string
+  period: string
+  meta?: string
+  summary: React.ReactNode
+  bullets: string[]
+  tags: string[]
+  links: { label: string; href: string }[]
+}
+
+const projects: Project[] = [
   {
-    title: "Field Matrix",
-    description:
-      "Machine Learning research project working under Dr. Muhammad Farrukh Shahid. Trained CNN model achieving over 85% accuracy in predicting inter-crop distance for smart farming yield optimization.",
-    technologies: ["Python", "CNN", "Machine Learning", "Computer Vision"],
-    status: "In Progress",
-    links: {
-      // demo: "#",
-      github: "https://github.com/smshozab/FieldMatrix",
-    },
-    category: "Research",
-    icon: <Brain className="w-6 h-6" />,
-    color: "from-purple-500 to-pink-500",
+    title: "AquaGrid",
+    category: "RnD FYP / AIoT",
+    period: "In progress",
+    meta: "Supervision: Dr. Muhammad Farrukh Shahid",
+    summary: (
+      <>
+        <strong className="font-semibold text-foreground">AI-powered tools for aquaculture</strong> and marine science—smart monitoring systems for oceans, lakes, and ecosystems.
+        Presented at the <strong className="font-semibold text-foreground">National Centre of Physics (AITec-NCP)</strong>.
+      </>
+    ),
+    bullets: [
+      "Building intelligent monitoring pipelines for real-world aquatic environments.",
+      "Research-driven approach under faculty supervision with conference exposure.",
+    ],
+    tags: ["AIoT", "Python", "Machine Learning", "Aquaculture", "Research"],
+    links: [{ label: "Live", href: "https://aquagrid.tech" }],
   },
   {
-    title: "BlockTransfer",
-    description:
-      "Peer-to-peer file sharing application using WebRTC for real-time browser communication and RSA encryption for secure key exchange.",
-    technologies: ["WebRTC", "RSA Encryption", "JavaScript", "P2P"],
-    year: "2025",
-    links: {
-      // demo: "#",
-      github: "https://github.com/smshozab/blockchain_p2p",
-    },
-    category: "Web Application",
-    icon: <Zap className="w-6 h-6" />,
-    color: "from-blue-500 to-cyan-500",
+    title: "DeepCV.ai",
+    category: "Full stack / Cloud",
+    period: "2026",
+    summary: (
+      <>
+        Built with <strong className="font-semibold text-foreground">React and Node.js</strong> on{" "}
+        <strong className="font-semibold text-foreground">Azure</strong> services for scalability and analytics. Automated build, test, and deployment through{" "}
+        <strong className="font-semibold text-foreground">Azure CI/CD pipelines</strong>.
+      </>
+    ),
+    bullets: [
+      "Cloud-native architecture leveraging Azure for hosting and monitoring.",
+      "Automated deployment workflows for continuous delivery.",
+    ],
+    tags: ["React", "Node.js", "Azure", "CI/CD", "Cloud"],
+    links: [{ label: "Live", href: "https://deepcv.ai" }],
+  },
+  {
+    title: "Risk Lens AI",
+    category: "AI / FinTech",
+    period: "2026",
+    summary: (
+      <>
+        Intelligent credit risk tool using <strong className="font-semibold text-foreground">React, Supabase, and Gemini AI</strong> to parse financial PDFs/CSVs and compute key metrics.
+        Anomaly detection via <strong className="font-semibold text-foreground">Isolation Forest &amp; statistical outliers</strong> with an LLM-based risk explanation engine.
+      </>
+    ),
+    bullets: [
+      "Financial document ingestion and automated metric extraction.",
+      "Hybrid anomaly detection paired with LLM-driven risk narratives.",
+    ],
+    tags: ["React", "Supabase", "Gemini AI", "Isolation Forest", "FinTech"],
+    links: [],
   },
   {
     title: "ewastify",
-    description:
-      "E-waste management and automation platform built with Vite React, Express JS, Node JS, MongoDB, and Firebase. Includes live location tracking and path optimization.",
-    technologies: ["React", "Vite", "Express.js", "Node.js", "MongoDB", "Firebase", "OpenWeatherMap API"],
-    year: "2025",
-    links: {
-      demo: "https://www.canva.com/design/DAGk2t-MGXI/_yOho9aZWAZhnVhVIDVFZA/view?utm_content=DAGk2t-MGXI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6c0ac1ed70",
-      github: "https://github.com/smshozab/devday",
-    },
-    category: "Full Stack",
-    icon: <Globe className="w-6 h-6" />,
-    color: "from-green-500 to-emerald-500",
+    category: "Full stack / Sustainability",
+    period: "2025",
+    summary: (
+      <>
+        Platform for <strong className="font-semibold text-foreground">e-waste logistics</strong>: Vite + React client, Express/Node API, MongoDB, and Firebase for auth and realtime pieces. Includes{" "}
+        <strong className="font-semibold text-foreground">live routing</strong> and weather-aware path hints via OpenWeatherMap.
+      </>
+    ),
+    bullets: [
+      "Role-based flows and operational dashboards.",
+      "Geospatial hooks for pickup and dispatch planning.",
+    ],
+    tags: ["React", "Vite", "Express", "MongoDB", "Firebase", "Maps API"],
+    links: [
+      { label: "Overview", href: "https://www.canva.com/design/DAGk2t-MGXI/_yOho9aZWAZhnVhVIDVFZA/view?utm_content=DAGk2t-MGXI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6c0ac1ed70" },
+      { label: "Code", href: "https://github.com/smshozab/devday" },
+    ],
   },
   {
-    title: "Naiki.pk",
-    description:
-      "Student Financial Support Platform developed with React.js and Node.js, integrated with Supabase. Fully deployed to production on Vercel with performance testing for 25+ concurrent users.",
-    technologies: ["React.js", "Node.js", "Supabase", "Vercel"],
-    year: "2025",
-    links: {
-      demo: "Naiki.pk",
-      // github: "#",
-    },
-    category: "Full Stack",
-    icon: <Database className="w-6 h-6" />,
-    color: "from-orange-500 to-red-500",
+    title: "Field Matrix",
+    category: "Research / ML",
+    period: "2024",
+    meta: "Supervision: Dr. Muhammad Farrukh Shahid",
+    summary: (
+      <>
+        Research pipeline for <strong className="font-semibold text-foreground">smart farming</strong>: CNN-based modeling of{" "}
+        <strong className="font-semibold text-foreground">inter-crop spacing</strong> to inform yield decisions. Current models land north of{" "}
+        <strong className="font-semibold text-foreground">85% accuracy</strong> on the project&apos;s evaluation setup—tuning and field validation continue.
+      </>
+    ),
+    bullets: [
+      "Python training stack with emphasis on reproducible experiments.",
+      "Computer-vision feature design for agricultural imagery.",
+      "Ongoing iteration toward deployable, interpretable outputs.",
+    ],
+    tags: ["Python", "CNN", "Computer Vision", "Machine Learning", "Agriculture"],
+    links: [{ label: "GitHub", href: "https://github.com/smshozab/FieldMatrix" }],
   },
   {
     title: "FAST-StudyCircle",
-    description:
-      "Full-stack web app (MERN Stack) to match juniors with verified seniors for academic support. Features email confirmation using nodemailer.",
-    technologies: ["MongoDB", "Express.js", "React", "Node.js", "Nodemailer"],
-    year: "2024",
-    links: {
-      demo: "https://drive.google.com/drive/folders/1vmOowlPCljLVST7bI-Ai-ARG_tmD_YY6?usp=sharing",
-      github: "https://github.com/smshozab/FAST-StudyCircle",
-    },
-    category: "Full Stack",
-    icon: <Cpu className="w-6 h-6" />,
-    color: "from-indigo-500 to-purple-500",
-  },
-  {
-    title: "sahulat.io",
-    description:
-      "IoT Dashboard with backend logic and automated Python scripts to simulate real-time sensor data and derive quantities from fundamental measurements.",
-    technologies: ["Python", "IoT", "Dashboard", "Real-time Data"],
-    year: "2024",
-    links: {
-      demo: "https://asani-hackathon.vercel.app/",
-      github: "https://github.com/smshozab/Asani_Hackathon",
-    },
-    category: "IoT",
-    icon: <Zap className="w-6 h-6" />,
-    color: "from-yellow-500 to-orange-500",
-  },
-  {
-    title: "Asset-Sentinel",
-    description:
-      "Blockchain-based supply chain management system to digitally represent real-world assets as secure, tamper-proof tokens using SHA-2 hashing.",
-    technologies: ["Blockchain", "SHA-2", "Smart Contracts", "Supply Chain"],
-    year: "2023",
-    links: {
-      // demo: "#",
-      github: "https://github.com/smshozab/Asset-Sentinel",
-    },
-    category: "Blockchain",
-    icon: <Shield className="w-6 h-6" />,
-    color: "from-teal-500 to-blue-500",
+    category: "Full stack / Community",
+    period: "2024",
+    summary: (
+      <>
+        MERN app matching <strong className="font-semibold text-foreground">juniors with verified seniors</strong> for coursework help. Email confirmations via{" "}
+        <strong className="font-semibold text-foreground">Nodemailer</strong>, moderation hooks, and a focus on trust signals in the UI.
+      </>
+    ),
+    bullets: ["Matching logic and profile verification story.", "Transactional email and basic admin tooling."],
+    tags: ["MongoDB", "Express", "React", "Node.js", "Nodemailer"],
+    links: [
+      { label: "Walkthrough", href: "https://drive.google.com/drive/folders/1vmOowlPCljLVST7bI-Ai-ARG_tmD_YY6?usp=sharing" },
+      { label: "Code", href: "https://github.com/smshozab/FAST-StudyCircle" },
+    ],
   },
 ]
 
 export default function Projects() {
+  const { sectionRef, fade } = useSectionReveal()
+
   return (
-    <section id="projects" className="py-20 gradient-bg">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-black mb-6 heading-gradient">Featured Projects</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            A showcase of my technical projects spanning web development, machine learning, blockchain, and IoT.
-          </p>
-          <div className="section-divider"></div>
-        </div>
+    <section id="projects" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
+      <div style={fade(0)}>
+        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Projects</h2>
+        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">
+          Selected builds—research, product, and experiments—with links where they&apos;re public.
+        </p>
+      </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <Card
-              key={index}
-              className={`h-full flex flex-col card-hover animate-fade-in-up border-0 shadow-xl overflow-hidden`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardHeader className="relative">
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-10`}></div>
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between gap-2 mb-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-br ${project.color} text-white shadow-lg`}>
-                      {project.icon}
-                    </div>
-                    <Badge variant="outline" className="text-xs font-mono pulse-badge">
-                      {project.category}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-xl font-bold mb-2">{project.title}</CardTitle>
-                  {(project.year || project.status) && (
-                    <p className="text-sm text-muted-foreground font-medium">{project.status || project.year}</p>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col relative">
-                <p className="text-muted-foreground mb-6 flex-1 leading-relaxed">{project.description}</p>
-
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge
-                        key={tech}
-                        variant="secondary"
-                        className={`text-xs font-mono animate-fade-in-right`}
-                        style={{ animationDelay: `${index * 0.1 + techIndex * 0.05}s` }}
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  <div className="flex gap-3">
-                    {project.links.demo && (
-                      <Button size="sm" className="btn-animate flex-1 font-medium" asChild>
-                        <a href={project.links.demo} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-3 w-3 mr-2" />
-                          Demo
-                        </a>
-                      </Button>
-                    )}
-                    {project.links.github && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="btn-animate flex-1 font-medium bg-transparent"
-                        asChild
-                      >
-                        <a href={project.links.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="h-3 w-3 mr-2" />
-                          Code
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      <div className="mt-10 space-y-0" style={fade(70)}>
+        {projects.map((p, i) => (
+          <TimelineEntry key={p.title} isLast={i === projects.length - 1}>
+            <TimelineDate>{p.period.toUpperCase()}</TimelineDate>
+            <TimelinePrimary>{p.title}</TimelinePrimary>
+            <TimelineRole>{p.category}</TimelineRole>
+            {p.meta ? <TimelineMeta>{p.meta}</TimelineMeta> : null}
+            <TimelineBody>{p.summary}</TimelineBody>
+            <TimelineBulletList items={p.bullets} />
+            <TimelineTags tags={p.tags} />
+            <TimelineLinks links={p.links} />
+          </TimelineEntry>
+        ))}
       </div>
     </section>
   )

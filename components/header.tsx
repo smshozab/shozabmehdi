@@ -1,120 +1,110 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Moon, Sun, Menu, X, Code2 } from "lucide-react"
-import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import Link from "next/link"
+import { Github, Linkedin, Mail, Menu, X } from "lucide-react"
 
 const navigation = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Experience", href: "#experience" },
-  { name: "Education", href: "#education" },
-  { name: "Projects", href: "#projects" },
-  { name: "Achievements", href: "#achievements" },
-  { name: "Contact", href: "#contact" },
+  { name: "about", href: "/about" },
+  { name: "profile", href: "/profile" },
+  { name: "achievements", href: "/achievements" },
+  { name: "research", href: "/research" },
+  { name: "contact", href: "/contact" },
+]
+
+const social = [
+  { href: "https://github.com/smshozab", label: "GitHub", icon: Github },
+  { href: "https://linkedin.com/in/shozabmehdi/", label: "LinkedIn", icon: Linkedin },
+  { href: "mailto:shozabb.work@gmail.com", label: "Email", icon: Mail },
 ]
 
 export default function Header() {
-  const [mounted, setMounted] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const { theme, setTheme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-    setMobileMenuOpen(false)
-  }
-
-  if (!mounted) return null
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/90 backdrop-blur-xl border-b shadow-lg" : "bg-transparent"
-      }`}
-    >
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <div className="flex items-center gap-2 text-xl font-bold">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-              <Code2 className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-gradient">Shozab Mehdi</span>
-          </div>
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-6 py-5">
+        <Link
+          href="/"
+          className="text-left text-base font-semibold tracking-tight text-foreground hover:opacity-80"
+          onClick={() => setMobileOpen(false)}
+        >
+          Shozab Mehdi
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-1">
-            {navigation.map((item, index) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className={`px-4 py-2 rounded-lg text-foreground/80 hover:text-foreground hover:bg-primary/10 transition-all duration-300 font-medium animate-fade-in-up`}
-                style={{ animationDelay: `${index * 0.1}s` }}
+        <nav
+          className="hidden max-w-[min(100%,28rem)] flex-wrap items-center justify-end gap-x-0 gap-y-1 text-sm text-muted-foreground md:flex lg:max-w-none"
+          aria-label="Primary"
+        >
+          {navigation.map((item, i) => (
+            <span key={item.href} className="flex items-center">
+              {i > 0 && <span className="mx-1.5 select-none text-border">/</span>}
+              <Link
+                href={item.href}
+                className="rounded px-1 py-0.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {item.name}
-              </button>
+              </Link>
+            </span>
+          ))}
+          <span className="mx-3 hidden h-4 w-px shrink-0 bg-border lg:inline-block" aria-hidden />
+          <div className="hidden items-center gap-1 lg:flex">
+            {social.map(({ href, label, icon: Icon }) => (
+              <a
+                key={href}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                aria-label={label}
+                className="rounded p-1.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Icon className="h-4 w-4" strokeWidth={1.5} />
+              </a>
             ))}
           </div>
+        </nav>
 
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="card-hover rounded-full"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5 text-yellow-500" />
-              ) : (
-                <Moon className="h-5 w-5 text-blue-600" />
-              )}
-            </Button>
+        <button
+          type="button"
+          className="rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
+          aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
 
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden card-hover rounded-full"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t bg-background/95 backdrop-blur-xl rounded-b-2xl">
-            <div className="flex flex-col space-y-2">
-              {navigation.map((item, index) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className={`text-left px-4 py-3 text-foreground/80 hover:text-foreground hover:bg-primary/10 rounded-lg transition-all duration-300 animate-fade-in-left`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
+      {mobileOpen && (
+        <div className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+          <div className="flex flex-col gap-3 text-sm">
+            {navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-left text-muted-foreground hover:text-foreground"
+              >
+                {item.name}
+              </Link>
+            ))}
+            <div className="flex gap-2 pt-2">
+              {social.map(({ href, label, icon: Icon }) => (
+                <a
+                  key={href}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  aria-label={label}
+                  className="rounded p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
-                  {item.name}
-                </button>
+                  <Icon className="h-5 w-5" strokeWidth={1.5} />
+                </a>
               ))}
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
     </header>
   )
 }

@@ -1,133 +1,273 @@
 "use client"
 
-import { ArrowDown, Download, Github, Linkedin, Mail, Sparkles } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import Link from "next/link"
+import { ArrowUpRight, Loader2 } from "lucide-react"
+import { useRef, useState, useEffect, useCallback } from "react"
+import { useSectionReveal } from "@/hooks/use-section-reveal"
+import { cn } from "@/lib/utils"
+
+const quickPrompts = [
+  { label: "Background", query: "Tell me about yourself and your background" },
+  { label: "Builds", query: "What projects have you built?" },
+  { label: "Work", query: "What's your work experience?" },
+  { label: "Skills", query: "What are your main technical skills?" },
+]
+
+type Message = { role: "user" | "assistant"; content: string }
 
 export default function Hero() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [draft, setDraft] = useState("")
+  const [messages, setMessages] = useState<Message[]>([])
+  const [streaming, setStreaming] = useState(false)
+  const { sectionRef, fade } = useSectionReveal()
+  const chatEndRef = useRef<HTMLDivElement>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
-  useEffect(() => {
-    setIsVisible(true)
+  const scrollToBottom = useCallback(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [])
 
-  const scrollToAbout = () => {
-    const aboutSection = document.querySelector("#about")
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth" })
+  useEffect(scrollToBottom, [messages, scrollToBottom])
+
+  const sendMessage = async (text: string) => {
+    const trimmed = text.trim()
+    if (!trimmed || streaming) return
+
+    const userMsg: Message = { role: "user", content: trimmed }
+    const newMessages = [...messages, userMsg]
+    setMessages(newMessages)
+    setDraft("")
+    setStreaming(true)
+
+    const assistantMsg: Message = { role: "assistant", content: "" }
+    setMessages([...newMessages, assistantMsg])
+
+    try {
+      abortRef.current = new AbortController()
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+        signal: abortRef.current.signal,
+      })
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Something went wrong" }))
+        setMessages((prev) => {
+          const updated = [...prev]
+          updated[updated.length - 1] = { role: "assistant", content: err.error || "Something went wrong. Try again!" }
+          return updated
+        })
+        setStreaming(false)
+        return
+      }
+
+      const reader = res.body?.getReader()
+      const decoder = new TextDecoder()
+      let accumulated = ""
+
+      if (reader) {
+        let buffer = ""
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          buffer += decoder.decode(value, { stream: true })
+          const lines = buffer.split("\n")
+          buffer = lines.pop() || ""
+
+          for (const line of lines) {
+            const trimLine = line.trim()
+            if (!trimLine.startsWith("data: ")) continue
+            const data = trimLine.slice(6)
+            if (data === "[DONE]") break
+
+            try {
+              const parsed = JSON.parse(data)
+              const delta = parsed.choices?.[0]?.delta?.content
+              if (delta) {
+                accumulated += delta
+                setMessages((prev) => {
+                  const updated = [...prev]
+                  updated[updated.length - 1] = { role: "assistant", content: accumulated }
+                  return updated
+                })
+              }
+            } catch {
+              // skip malformed chunks
+            }
+          }
+        }
+      }
+    } catch (e: unknown) {
+      if (e instanceof DOMException && e.name === "AbortError") return
+      setMessages((prev) => {
+        const updated = [...prev]
+        updated[updated.length - 1] = { role: "assistant", content: "Something went wrong. Try again!" }
+        return updated
+      })
+    } finally {
+      setStreaming(false)
+      abortRef.current = null
     }
   }
 
+  const handleQuickPrompt = (query: string) => {
+    sendMessage(query)
+  }
+
+  const hasChat = messages.length > 0
+
   return (
-    <section
-      id="home"
-      className="min-h-screen flex items-center justify-center pt-16 particles-bg gradient-bg relative overflow-hidden"
-    >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse animation-delay-300"></div>
-        <div className="absolute top-1/2 right-1/3 w-32 h-32 bg-destructive/10 rounded-full blur-2xl animate-pulse animation-delay-500"></div>
-      </div>
+    <section id="home" ref={sectionRef} className="relative pb-16 pt-10 sm:pb-20 sm:pt-14">
+      <div
+        className="pointer-events-none absolute right-0 top-16 h-28 w-28 rounded-full border border-dashed border-border/45 opacity-35 section-orbit-ring max-sm:hidden"
+        aria-hidden
+      />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center">
-          <div className={`mb-8 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}>
-            <div className="relative inline-block">
-              <Image
-                src="/images/shozab-profile.jpg"
-                alt="Shozab Mehdi"
-                width={200}
-                height={200}
-                className="rounded-full mx-auto mb-6 border-4 border-primary/30 shadow-2xl glow-primary float-animation"
-              />
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center animate-bounce">
-                <Sparkles className="w-4 h-4 text-accent-foreground" />
-              </div>
-            </div>
-          </div>
-
-          <div className={`${isVisible ? "animate-fade-in-up animate-delay-200" : "opacity-0"}`}>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black mb-4 leading-tight">
-              Hi, I'm <span className="text-gradient bg-clip-text">Shozab Mehdi</span>
-            </h1>
-          </div>
-
-          <div className={`${isVisible ? "animate-fade-in-up animate-delay-300" : "opacity-0"}`}>
-            <div className="relative inline-block">
-              <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground mb-8 font-medium">
-                Computer Science Student | Software Engineer | AI Enthusiast
-              </p>
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary via-accent to-destructive rounded-full"></div>
-            </div>
-          </div>
-
-          <div className={`${isVisible ? "animate-fade-in-up animate-delay-400" : "opacity-0"}`}>
-            <p className="text-lg lg:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-              Final-year CS student at <span className="text-primary font-semibold">FAST NUCES</span> with expertise in{" "}
-              <span className="text-accent font-semibold">Full-Stack Development</span> and a growing passion for{" "}
-              <span className="text-destructive font-semibold">Machine Learning</span> and AI innovation.
-            </p>
-          </div>
-
-          <div
-            className={`flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 ${isVisible ? "animate-fade-in-up animate-delay-500" : "opacity-0"}`}
-          >
-            <Button
-              size="lg"
-              asChild
-              className="w-full sm:w-auto card-hover btn-animate hero-gradient text-white font-semibold px-8 py-4 text-lg shadow-2xl hover:shadow-primary/25 transition-all duration-300"
-            >
-              <a 
-                href="https://drive.google.com/file/d/1QiB1DFGcgoftago-M8eF6qA91ATEUln9/view?usp=sharing" 
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="View My Resume"
-              >
-                View My Resume
-              </a>
-            </Button>
-
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                size="icon"
-                className="w-12 h-12 card-hover glow-primary bg-transparent"
-                asChild
-              >
-                <a href="mailto:shozabb.work@gmail.com" aria-label="Email">
-                  <Mail className="h-5 w-5" />
-                </a>
-              </Button>
-              <Button variant="outline" size="icon" className="w-12 h-12 card-hover glow-accent bg-transparent" asChild>
-                <a
-                  href="https://linkedin.com/in/shozabmehdi/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a>
-              </Button>
-              <Button variant="outline" size="icon" className="w-12 h-12 card-hover bg-transparent" asChild>
-                <a href="https://github.com/smshozab" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                  <Github className="h-5 w-5" />
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          <div className={`${isVisible ? "animate-fade-in-up animate-delay-600" : "opacity-0"}`}>
-            <Button
-              variant="ghost"
-              onClick={scrollToAbout}
-              className="animate-bounce hover:animate-none transition-all duration-300 p-4 rounded-full hover:bg-primary/10"
-            >
-              <ArrowDown className="h-8 w-8 text-primary" />
-            </Button>
+      <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:gap-12" style={fade(0)}>
+        <div className="shrink-0">
+          <div className="section-surface relative overflow-hidden rounded-full border border-border p-0.5">
+            <Image
+              src="/images/shozab-profile.jpg"
+              alt="Shozab Mehdi"
+              width={112}
+              height={112}
+              className="h-28 w-28 rounded-full object-cover grayscale transition-all duration-300 hover:grayscale-0 sm:h-32 sm:w-32"
+              priority
+            />
           </div>
         </div>
+        <div className="min-w-0 flex-1 space-y-4">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Hey, I&apos;m Shozab <span aria-hidden>👋</span>
+          </h1>
+          <p className="max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            CS @ FAST NUCES · full-stack · ML &amp; AI when it needs to ship for real users.
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="section-surface mt-12 rounded-2xl border border-border bg-card p-6 sm:p-8"
+        style={fade(120)}
+      >
+        {!hasChat && (
+          <>
+            <div className="flex gap-3">
+              <div
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-medium text-background"
+                aria-hidden
+              >
+                S
+              </div>
+              <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+                Ask me anything — my experience, projects, education, or skills. Powered by AI.
+              </p>
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {quickPrompts.map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => handleQuickPrompt(p.query)}
+                  className={cn(
+                    "section-pill inline-flex items-center gap-2 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs text-foreground sm:text-sm",
+                  )}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {hasChat && (
+          <div className="max-h-72 space-y-4 overflow-y-auto pr-1 sm:max-h-80">
+            {messages.map((msg, i) => (
+              <div key={i} className={cn("flex gap-3", msg.role === "user" && "flex-row-reverse")}>
+                <div
+                  className={cn(
+                    "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-medium",
+                    msg.role === "assistant"
+                      ? "bg-foreground text-background"
+                      : "bg-muted text-muted-foreground",
+                  )}
+                  aria-hidden
+                >
+                  {msg.role === "assistant" ? "S" : "Y"}
+                </div>
+                <div
+                  className={cn(
+                    "max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                    msg.role === "assistant"
+                      ? "bg-muted/50 text-foreground"
+                      : "bg-foreground/5 text-foreground",
+                  )}
+                >
+                  {msg.content || (
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  )}
+                </div>
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+        )}
+
+        <div className={cn("border-t border-border pt-6", hasChat ? "mt-4" : "mt-8")}>
+          <div className="flex items-end gap-2">
+            <label htmlFor="hero-ask" className="sr-only">
+              Message
+            </label>
+            <input
+              id="hero-ask"
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  sendMessage(draft)
+                }
+              }}
+              placeholder={hasChat ? "Ask a follow-up…" : "Ask me anything…"}
+              disabled={streaming}
+              className="min-h-10 flex-1 border-0 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 disabled:opacity-50"
+            />
+            <button
+              type="button"
+              onClick={() => sendMessage(draft)}
+              disabled={streaming || !draft.trim()}
+              className="section-pill flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground disabled:opacity-40"
+              aria-label="Send"
+            >
+              {streaming ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ArrowUpRight className="h-4 w-4 rotate-[-45deg]" strokeWidth={1.5} />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {hasChat && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {quickPrompts.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => handleQuickPrompt(p.query)}
+                disabled={streaming}
+                className="rounded-full border border-border/60 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-border hover:text-foreground disabled:opacity-40"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

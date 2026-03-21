@@ -1,77 +1,73 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { GraduationCap, CalendarDays, MapPin } from "lucide-react"
+"use client"
+
+import { useSectionReveal } from "@/hooks/use-section-reveal"
+import {
+  TimelineBody,
+  TimelineBulletList,
+  TimelineDate,
+  TimelineEntry,
+  TimelineMeta,
+  TimelinePrimary,
+  TimelineRole,
+  TimelineTags,
+} from "@/components/profile-timeline"
+
+const leadership = [
+  "Dev Deputy — ACM (Association for Computing Machinery)",
+  "Tech Lead — Google Developer Student Clubs (GDSC)",
+  "Web Dev Lead — Hackops",
+  "Regular participant in inter- and intra-university competitions",
+]
+
+const coursework = [
+  "Linear Algebra · Probability & Statistics",
+  "Database Systems · Algorithms · Operating Systems",
+  "Data Structures · Object-Oriented Programming",
+]
+
+const highlights = [
+  "Dean's List — Spring 2024",
+  "ICPC Finalist — 2024",
+  "Built and shipped the Hackops society website",
+]
 
 export default function Education() {
+  const { sectionRef, fade } = useSectionReveal()
+
   return (
-    <section id="education" className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Education</h2>
-          <p className="text-lg text-muted-foreground">Academic background and achievements in Computer Science.</p>
-        </div>
+    <section id="education" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
+      <div style={fade(0)}>
+        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Education</h2>
+        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">
+          Degree, leadership, and coursework in one thread.
+        </p>
+      </div>
 
-        <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader>
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <GraduationCap className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <CardTitle className="text-xl mb-2">BS in Computer Science</CardTitle>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-muted-foreground">
-                    <span className="font-medium">FAST National University</span>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        Karachi, Pakistan
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <CalendarDays className="h-4 w-4" />
-                        2022 – 2026
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Leadership & Activities</h4>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>• Dev Deputy at ACM (Association for Computing Machinery)</li>
-                    <li>• Tech Lead at GDSC (Google Developer Student Clubs)</li>
-                    <li>• Web Dev Lead at Hackops</li>
-                    <li>• Active participant in inter- and intra-university competitions</li>
-                  </ul>
-                </div>
+      <div className="mt-10" style={fade(70)}>
+        <TimelineEntry isLast>
+          <TimelineDate>2022 – 2026 · IN PROGRESS</TimelineDate>
+          <TimelinePrimary>FAST National University</TimelinePrimary>
+          <TimelineRole>Bachelor of Science in Computer Science</TimelineRole>
+          <TimelineMeta>Karachi, Pakistan</TimelineMeta>
+          <TimelineBody>
+            Rigorous CS foundation with heavy emphasis on systems, math, and software engineering practice. Outside
+            lectures, most of my energy goes to{" "}
+            <strong className="font-semibold text-foreground">student societies</strong>,{" "}
+            <strong className="font-semibold text-foreground">competitions</strong>, and{" "}
+            <strong className="font-semibold text-foreground">shipping real tools</strong> for peers and orgs on campus.
+          </TimelineBody>
 
-                <div>
-                  <h4 className="font-semibold mb-2">Relevant Coursework</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-muted-foreground">
-                    <span>• Linear Algebra</span>
-                    <span>• Probability & Statistics</span>
-                    <span>• Database Systems</span>
-                    <span>• Algorithms</span>
-                    <span>• Operating Systems</span>
-                    <span>• Data Structures</span>
-                    <span>• Object-Oriented Programming</span>
-                  </div>
-                </div>
+          <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Leadership &amp; activities</p>
+          <TimelineBulletList items={leadership} />
 
-                <div>
-                  <h4 className="font-semibold mb-2">Academic Achievements</h4>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>• Dean's List Spring 2024</li>
-                    <li>• ICPC Finalist 2024</li>
-                    <li>• Built university society website for Hackops</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Relevant coursework</p>
+          <TimelineBulletList items={coursework} />
+
+          <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Academic highlights</p>
+          <TimelineBulletList items={highlights} />
+
+          <TimelineTags tags={["FAST NUCES", "Karachi", "BS Computer Science", "2026"]} />
+        </TimelineEntry>
       </div>
     </section>
   )

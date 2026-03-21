@@ -1,176 +1,167 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { CalendarDays, MapPin } from "lucide-react"
+"use client"
+
+import { useSectionReveal } from "@/hooks/use-section-reveal"
+import {
+  TimelineBody,
+  TimelineBulletList,
+  TimelineDate,
+  TimelineEntry,
+  TimelineMeta,
+  TimelinePrimary,
+  TimelineRole,
+  TimelineTags,
+} from "@/components/profile-timeline"
 
 const experiences = [
   {
-    title: "Contractual Software Developer",
+    company: "Inferifi",
+    title: "Software Engineering Trainee",
+    location: "Illinois, US · On-site",
+    duration: "Nov 2025 – Present",
+    summary: (
+      <>
+        Full-time trainee role focused on <strong className="font-semibold text-foreground">production software engineering</strong> workflows and hands-on delivery within a fast-moving team.
+      </>
+    ),
+    bullets: [],
+    tags: ["Engineering", "Full-time"],
+  },
+  {
+    company: "Neospark Solutions",
+    title: "Software Development Intern",
+    location: "Australia · Remote",
+    duration: "Nov 2025 – Jan 2026",
+    summary: (
+      <>
+        Shipped features on <strong className="font-semibold text-foreground">deepcv.ai</strong> using the MERN stack. Set up{" "}
+        <strong className="font-semibold text-foreground">Azure CI/CD</strong> pipelines and integrated{" "}
+        <strong className="font-semibold text-foreground">LLM-based capabilities</strong> with structured prompts and modular service design.
+      </>
+    ),
+    bullets: [
+      "RESTful APIs and efficient MongoDB data modeling for the core product.",
+      "End-to-end feature ownership—implementation through deployment alongside founders.",
+    ],
+    tags: ["React", "Node.js", "MongoDB", "Azure", "LLM", "CI/CD", "REST"],
+  },
+  {
+    company: "10Pearls",
+    title: "Full Stack Developer Intern",
+    location: "Karachi, Pakistan · Hybrid",
+    duration: "Sep 2025 – Nov 2025",
+    summary: (
+      <>
+        Built <strong className="font-semibold text-foreground">Notely</strong>, a MERN-based notes app with secure auth, an{" "}
+        <strong className="font-semibold text-foreground">AI chatbot</strong>, tagging, full-text search, and auto-save. Deployed on Vercel with a full{" "}
+        <strong className="font-semibold text-foreground">CI/CD pipeline</strong> and maintained quality via unit tests, UAT, and SonarQube.
+      </>
+    ),
+    bullets: [
+      "Structured logging with PinoLogger and custom exception-handling middleware.",
+      "Git-driven collaboration with detailed PR reviews and disciplined commit workflow.",
+    ],
+    tags: ["MERN", "React", "Node.js", "Vercel", "CI/CD", "SonarQube", "AI"],
+  },
+  {
     company: "FarmTriage",
+    title: "Contractual Software Developer",
     location: "Remote",
     duration: "Jan 2025 – Jun 2025",
-    description: [
-      "Designed and developed a landing page for the startup showcasing the product and enabling customers to contact the team.",
-      "Architected and initiated a comprehensive agricultural workforce management platform as a solo developer using the MERN Stack (MongoDB, Express.js, React, Node.js) with TypeScript for enhanced type safety and scalability.",
-      // "Engineered a sophisticated farmers workforce management system integrated with Monday.com API, implementing RESTful services and real-time data synchronization for optimized resource allocation and task scheduling.",
-      "Built an intelligent Google Sheets automation solution using Zapier webhooks and custom JavaScript functions, reducing manual data entry by 85% and improving operational efficiency through automated workflow orchestration.",
+    summary: (
+      <>
+        Shipped the startup&apos;s marketing site, then owned an <strong className="font-semibold text-foreground">agricultural workforce</strong> product on the{" "}
+        <strong className="font-semibold text-foreground">MERN stack with TypeScript</strong> end-to-end. Automated ops with{" "}
+        <strong className="font-semibold text-foreground">Zapier + Google Sheets</strong> and custom JS—cutting manual data entry by about{" "}
+        <strong className="font-semibold text-foreground">85%</strong>.
+      </>
+    ),
+    bullets: [
+      "Landing page for product discovery and inbound contact.",
+      "Solo-initiated workforce management platform: MongoDB, Express, React, Node—typed for maintainability.",
+      "Webhook-driven workflows and spreadsheet integrations for teams in the field.",
     ],
-    technologies: [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "Express.js",
-      "TypeScript",
-      // "Monday.com API",
-      "Zapier",
-      "Google Sheets API",
-      "RESTful APIs",
-      "Webhooks",
-    ],
+    tags: ["React", "Node.js", "MongoDB", "TypeScript", "Zapier", "REST", "Webhooks"],
   },
   {
-    title: "Teaching Assistant - Data Structures",
     company: "FAST National University",
+    title: "Teaching Assistant — Data Structures",
     location: "Karachi, Pakistan",
     duration: "Aug 2024 – Dec 2024",
-    description: [
-      "Facilitated advanced data structures and algorithms coursework for 50+ undergraduate students, covering complex topics including AVL trees, graph algorithms, dynamic programming, and computational complexity analysis.",
-      "Developed comprehensive coding assignments and generated a script using Python to export marks from excel to Google Classroom, enabling efficient scoring and marking easiness.",
-      "Conducted weekly sessions focusing on practical implementation of data structures, debugging techniques, and code optimization strategies, resulting in a 25% improvement in student performance metrics.",
+    summary: (
+      <>
+        Supported <strong className="font-semibold text-foreground">50+ students</strong> through DS&amp;A—trees, graphs, DP, and complexity. Built grading tooling in{" "}
+        <strong className="font-semibold text-foreground">Python</strong> (Excel → Google Classroom) and ran weekly hands-on labs; cohort metrics improved roughly{" "}
+        <strong className="font-semibold text-foreground">25%</strong>.
+      </>
+    ),
+    bullets: [
+      "Lectures and assignments spanning AVL, graph algorithms, and dynamic programming.",
+      "Automation scripts to streamline marking and exports.",
+      "Practical sessions on debugging, profiling, and clean implementation patterns.",
     ],
-    technologies: [
-      "C++",
-      "Python",
-      "Data Structures",
-      "Algorithms",
-      "Git",
-      "Unit Testing",
-      "Performance Analysis",
-      "Code Review",
-    ],
+    tags: ["C++", "Python", "Algorithms", "Teaching", "Git"],
   },
   {
-    title: "Tech Advisor & Branding Consultant",
     company: "Executive Council Network",
+    title: "Tech Advisor & Branding Consultant",
     location: "Remote",
     duration: "May 2023 – Dec 2023",
-    description: [
-      "Spearheaded comprehensive UI/UX optimization initiatives, implementing responsive design patterns and accessibility standards (WCAG 2.1) to enhance user engagement and cross-platform compatibility.",
-      "Architected modern web solutions using cutting-edge frontend technologies including React.js with hooks, Semantic UI components, and Tailwind CSS utility-first framework for rapid prototyping and consistent design systems.",
-      "Developed scalable backend infrastructure using Node.js with Express framework, implementing JWT authentication, rate limiting, and API versioning strategies to ensure robust and secure application architecture.",
+    summary: (
+      <>
+        Led <strong className="font-semibold text-foreground">UI/UX</strong> upgrades with responsive patterns and{" "}
+        <strong className="font-semibold text-foreground">WCAG 2.1</strong> in mind. Delivered React + Tailwind frontends and{" "}
+        <strong className="font-semibold text-foreground">Node/Express</strong> APIs with JWT, rate limits, and versioning.
+      </>
+    ),
+    bullets: [
+      "Design-system style components with Semantic UI and Tailwind for speed.",
+      "Backend auth, API hardening, and deployment-minded structure.",
     ],
-    technologies: [
-      "React.js",
-      "Node.js",
-      "Semantic UI",
-      "Tailwind CSS",
-      "Express.js",
-      "JWT",
-      "REST APIs",
-      "Responsive Design",
-      "UX/UI Design",
-      "Git",
-    ],
+    tags: ["React", "Node.js", "Express", "JWT", "Tailwind", "Accessibility"],
   },
   {
-    title: "Web Developer (Freelance)",
     company: "Upwork",
+    title: "Web Developer (Freelance)",
     location: "Remote",
     duration: "Sep 2022 – Jul 2023",
-    description: [
-      "Delivered full-stack web applications for diverse clients using modern JavaScript frameworks including React.js, Vue.js, etc, with backend implementations in Node.js, Python Flask.",
-      "Implemented comprehensive database solutions using both SQL (PostgreSQL, MySQL) and NoSQL (MongoDB, Firebase, Supabase) databases, optimizing query performance and implementing proper indexing strategies for scalable data management.",
-      "Integrated third-party APIs, implemented OAuth authentication systems, and deployed applications on cloud platforms (Vercel, Heroku) with CI/CD pipelines using GitHub Actions.",
+    summary: (
+      <>
+        Delivered <strong className="font-semibold text-foreground">full-stack</strong> client work across{" "}
+        <strong className="font-semibold text-foreground">React, Vue</strong>, and{" "}
+        <strong className="font-semibold text-foreground">Node / Flask</strong> with SQL and NoSQL data layers, OAuth integrations, and{" "}
+        <strong className="font-semibold text-foreground">CI/CD</strong> on Vercel, Heroku, and GitHub Actions.
+      </>
+    ),
+    bullets: [
+      "PostgreSQL, MySQL, MongoDB, Firebase, and Supabase where each fit best.",
+      "Third-party APIs and production deploy pipelines.",
     ],
-    technologies: [
-      "React.js",
-      "Vue.js",
-      // "Angular",
-      "Node.js",
-      "Python",
-      "Flask",
-      // "Laravel",
-      "PostgreSQL",
-      "MongoDB",
-      // "AWS",
-      // "Stripe API",
-      "OAuth",
-      "CI/CD",
-    ],
-  },
-  {
-    title: "Full Stack Developer Intern",
-    company: "Pixact",
-    location: "Onsite",
-    duration: "Nov 2022 – Aug 2023",
-    description: [
-      "Developed 5+ production-ready web applications using the MERN Stack (MongoDB, Express.js, React, Node.js) and implemented SQL database solutions with optimized query performance and proper normalization techniques.",
-      "Collaborated on an innovative Web3 gaming platform, implementing hashing integration with IS algorithms, resolving complex authentication challenges with third-party OAuth providers, and ensuring secure user data management.",
-      "Implemented responsive frontend designs using modern CSS frameworks, integrated RESTful APIs, and deployed applications with proper error handling, logging, and monitoring systems for production environments.",
-    ],
-    technologies: [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "Express.js",
-      "SQL",
-      "Web3",
-      "OAuth",
-      "Smart Contracts",
-      "RESTful APIs",
-      "Responsive Design",
-    ],
+    tags: ["React", "Vue", "Node.js", "Flask", "PostgreSQL", "MongoDB", "OAuth", "CI/CD"],
   },
 ]
 
 export default function Experience() {
-  return (
-    <section id="experience" className="py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Work Experience</h2>
-          <p className="text-lg text-muted-foreground">
-            Professional experience in full-stack development and emerging technologies.
-          </p>
-        </div>
+  const { sectionRef, fade } = useSectionReveal()
 
-        <div className="max-w-4xl mx-auto">
-          {experiences.map((exp, index) => (
-            <Card key={index} className="mb-6">
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <CardTitle className="text-xl">{exp.title}</CardTitle>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CalendarDays className="h-4 w-4" />
-                    {exp.duration}
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 text-muted-foreground">
-                  <span className="font-medium">{exp.company}</span>
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {exp.location}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-4">
-                  {exp.description.map((item, i) => (
-                    <li key={i} className="text-muted-foreground">
-                      • {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-2">
-                  {exp.technologies.map((tech) => (
-                    <Badge key={tech} variant="secondary">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+  return (
+    <section id="experience" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
+      <div style={fade(0)}>
+        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Experience</h2>
+        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">Roles in engineering, product, teaching, and consulting—newest first.</p>
+      </div>
+
+      <div className="mt-10 space-y-0" style={fade(60)}>
+        {experiences.map((exp, i) => (
+          <TimelineEntry key={exp.company + exp.duration} isLast={i === experiences.length - 1}>
+            <TimelineDate>{exp.duration.toUpperCase()}</TimelineDate>
+            <TimelinePrimary>{exp.company}</TimelinePrimary>
+            <TimelineRole>{exp.title}</TimelineRole>
+            <TimelineMeta>{exp.location}</TimelineMeta>
+            <TimelineBody>{exp.summary}</TimelineBody>
+            <TimelineBulletList items={exp.bullets} />
+            <TimelineTags tags={exp.tags} />
+          </TimelineEntry>
+        ))}
       </div>
     </section>
   )
