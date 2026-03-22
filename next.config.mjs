@@ -8,9 +8,6 @@ const nextConfig = {
       { source: "/skills", destination: "/research", permanent: true },
     ]
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
