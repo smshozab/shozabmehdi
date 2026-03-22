@@ -3,11 +3,16 @@ import { MongoClient } from "mongodb"
 import nodemailer from "nodemailer"
 
 const MONGODB_URI = process.env.MONGODB_URI!
-const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com"
+const SMTP_HOST = (process.env.SMTP_HOST || "smtp.gmail.com").trim()
 const SMTP_PORT = Number(process.env.SMTP_PORT) || 587
-const SMTP_USER = process.env.SMTP_USER!
-const SMTP_PASS = process.env.SMTP_PASS!
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL!
+
+/** Gmail app passwords must match SMTP_USER's Google account; strip spaces/newlines from Vercel env. */
+function getSmtpConfig() {
+  const user = process.env.SMTP_USER?.trim()
+  const pass = process.env.SMTP_PASS?.trim().replace(/\s+/g, "")
+  const to = process.env.CONTACT_EMAIL?.trim()
+  return { user, pass, to }
+}
 
 let cachedClient: MongoClient | null = null
 
@@ -55,18 +60,30 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
     })
 
-    if (SMTP_USER && SMTP_PASS && CONTACT_EMAIL) {
+    const { user: smtpUser, pass: smtpPass, to: contactTo } = getSmtpConfig()
+    let emailSent = false
+
+    if (smtpUser && smtpPass && contactTo) {
       try {
-        const transporter = nodemailer.createTransport({
-          host: SMTP_HOST,
-          port: SMTP_PORT,
-          secure: SMTP_PORT === 465,
-          auth: { user: SMTP_USER, pass: SMTP_PASS },
-        })
+        const useGmail =
+          SMTP_HOST === "smtp.gmail.com" || SMTP_HOST.endsWith(".gmail.com")
+
+        const transporter = useGmail
+          ? nodemailer.createTransport({
+              service: "gmail",
+              auth: { user: smtpUser, pass: smtpPass },
+            })
+          : nodemailer.createTransport({
+              host: SMTP_HOST,
+              port: SMTP_PORT,
+              secure: SMTP_PORT === 465,
+              requireTLS: SMTP_PORT === 587,
+              auth: { user: smtpUser, pass: smtpPass },
+            })
 
         await transporter.sendMail({
-          from: `"Portfolio Contact" <${SMTP_USER}>`,
-          to: CONTACT_EMAIL,
+          from: `"Portfolio Contact" <${smtpUser}>`,
+          to: contactTo,
           replyTo: email,
           subject: `New Contact Form: ${subject}`,
           text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
@@ -84,12 +101,19 @@ export async function POST(request: NextRequest) {
               <p style="font-size:13px;color:#888">Received: ${new Date().toLocaleString()}</p>
             </div>`,
         })
+        emailSent = true
       } catch (emailErr) {
         console.error("Email notification failed:", emailErr)
       }
     }
 
-    return NextResponse.json({ success: true, message: "Message sent successfully!" })
+    return NextResponse.json({
+      success: true,
+      emailSent,
+      message: emailSent
+        ? "Message sent successfully!"
+        : "Your message was saved. Email notification failed—in Google Account → Security → App passwords, create a new 16-character password for the same Gmail address as SMTP_USER, paste it into Vercel SMTP_PASS (no spaces or quotes), then redeploy.",
+    })
   } catch (error) {
     console.error("Contact form error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

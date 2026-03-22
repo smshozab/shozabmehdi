@@ -29,7 +29,7 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<{
-    type: "success" | "error" | null
+    type: "success" | "warning" | "error" | null
     message: string
   }>({ type: null, message: "" })
 
@@ -48,8 +48,9 @@ export default function Contact() {
       const result = await response.json()
 
       if (response.ok) {
+        const emailSent = result.emailSent !== false
         setSubmitStatus({
-          type: "success",
+          type: emailSent ? "success" : "warning",
           message: result.message || "Message sent successfully!",
         })
         setFormData({ name: "", email: "", subject: "", message: "" })
@@ -133,7 +134,15 @@ export default function Contact() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {submitStatus.type && (
-              <Alert variant={submitStatus.type === "success" ? "default" : "destructive"}>
+              <Alert
+                variant={
+                  submitStatus.type === "success"
+                    ? "default"
+                    : submitStatus.type === "warning"
+                      ? "warning"
+                      : "destructive"
+                }
+              >
                 {submitStatus.type === "success" ? (
                   <CheckCircle className="h-4 w-4" strokeWidth={1.5} />
                 ) : (
