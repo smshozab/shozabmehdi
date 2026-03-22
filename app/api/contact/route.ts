@@ -12,8 +12,18 @@ const CONTACT_EMAIL = process.env.CONTACT_EMAIL!
 let cachedClient: MongoClient | null = null
 
 async function getMongoClient() {
-  if (cachedClient) return cachedClient
-  cachedClient = await new MongoClient(MONGODB_URI).connect()
+  if (cachedClient) {
+    try {
+      await cachedClient.db("admin").command({ ping: 1 })
+      return cachedClient
+    } catch {
+      cachedClient = null
+    }
+  }
+  cachedClient = await new MongoClient(MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000,
+    connectTimeoutMS: 10000,
+  }).connect()
   return cachedClient
 }
 
