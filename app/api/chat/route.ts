@@ -14,7 +14,7 @@ Final-year CS student at FAST National University (NUCES), Karachi. Focus: TypeS
 - Dean's List Spring 2024, ICPC Finalist 2024
 
 ## Experience (newest first)
-1. Inferifi — Software Engineering Trainee (Nov 2025–Present, Illinois US, On-site). Full-time production engineering.
+1. Inferifi — Software Engineering Trainee (Nov 2025–Present, Illinois US, Remote). Full-time production engineering.
 2. Neospark Solutions — Software Development Intern (Nov 2025–Jan 2026, Australia, Remote). MERN stack for deepcv.ai, Azure CI/CD, LLM integration, RESTful APIs.
 3. 10Pearls — Full Stack Developer Intern (Sep–Nov 2025, Karachi, Hybrid). Built Notely (MERN), AI chatbot, CI/CD, PinoLogger, SonarQube.
 4. FarmTriage — Contractual Software Developer (Jan–Jun 2025, Remote). Agricultural workforce product, MERN+TypeScript, Zapier+Google Sheets automation cutting manual entry ~85%.

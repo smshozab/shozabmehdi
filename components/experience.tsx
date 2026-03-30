@@ -16,7 +16,7 @@ const experiences = [
   {
     company: "Inferifi",
     title: "Software Engineering Trainee",
-    location: "Illinois, US · On-site",
+    location: "Illinois, US · Remote",
     duration: "Nov 2025 – Present",
     summary: (
       <>
