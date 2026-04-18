@@ -63,24 +63,24 @@ const experiences = [
     tags: ["MERN", "React", "Node.js", "Vercel", "CI/CD", "SonarQube", "AI"],
   },
   {
-    company: "FarmTriage",
-    title: "Contractual Software Developer",
+    company: "Passion & freelance product work",
+    title: "Product Engineer",
     location: "Remote",
-    duration: "Jan 2025 – Jun 2025",
+    duration: "Jan 2025 – Present",
     summary: (
       <>
-        Shipped the startup&apos;s marketing site, then owned an <strong className="font-semibold text-foreground">agricultural workforce</strong> product on the{" "}
-        <strong className="font-semibold text-foreground">MERN stack with TypeScript</strong> end-to-end. Automated ops with{" "}
-        <strong className="font-semibold text-foreground">Zapier + Google Sheets</strong> and custom JS—cutting manual data entry by about{" "}
-        <strong className="font-semibold text-foreground">85%</strong>.
+        <strong className="font-semibold text-foreground">Product engineering</strong> across self-driven and client projects in{" "}
+        <strong className="font-semibold text-foreground">edtech</strong>, <strong className="font-semibold text-foreground">medical</strong>,{" "}
+        <strong className="font-semibold text-foreground">agriculture</strong>, <strong className="font-semibold text-foreground">aquaculture</strong>, and{" "}
+        <strong className="font-semibold text-foreground">blockchain</strong>—from discovery and UX through implementation, integrations, and shipping.
       </>
     ),
     bullets: [
-      "Landing page for product discovery and inbound contact.",
-      "Solo-initiated workforce management platform: MongoDB, Express, React, Node—typed for maintainability.",
-      "Webhook-driven workflows and spreadsheet integrations for teams in the field.",
+      "End-to-end builds: requirements, architecture, full-stack delivery, and iteration with stakeholders.",
+      "Domain-spanning work—learning each space quickly while keeping systems maintainable and production-minded.",
+      "APIs, data layers, and modern web stacks tailored to each product; on-chain and off-chain pieces where blockchain fit the problem.",
     ],
-    tags: ["React", "Node.js", "MongoDB", "TypeScript", "Zapier", "REST", "Webhooks"],
+    tags: ["Product", "Full-stack", "TypeScript", "React", "Node.js", "Web3", "REST", "MongoDB"],
   },
   {
     company: "FAST National University",

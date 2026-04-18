@@ -14,7 +14,7 @@ const highlights = [
   {
     emoji: "⚙️",
     title: "Build & ship",
-    line: "Inferifi, Neospark, 10Pearls, Upwork, FarmTriage—shipping across stacks and time zones.",
+    line: "Inferifi, Neospark, 10Pearls, Upwork, plus passion and freelance product work in edtech, medical, agriculture, aquaculture, and blockchain.",
   },
   {
     emoji: "🧭",

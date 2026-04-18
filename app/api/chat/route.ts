@@ -17,7 +17,7 @@ Final-year CS student at FAST National University (NUCES), Karachi. Focus: TypeS
 1. Inferifi — Software Engineering Trainee (Nov 2025–Present, Illinois US, Remote). Full-time production engineering.
 2. Neospark Solutions — Software Development Intern (Nov 2025–Jan 2026, Australia, Remote). MERN stack for deepcv.ai, Azure CI/CD, LLM integration, RESTful APIs.
 3. 10Pearls — Full Stack Developer Intern (Sep–Nov 2025, Karachi, Hybrid). Built Notely (MERN), AI chatbot, CI/CD, PinoLogger, SonarQube.
-4. FarmTriage — Contractual Software Developer (Jan–Jun 2025, Remote). Agricultural workforce product, MERN+TypeScript, Zapier+Google Sheets automation cutting manual entry ~85%.
+4. Passion & freelance product work — Product Engineer (Jan 2025–Present, Remote). Product engineering across edtech, medical, agriculture, aquaculture, and blockchain projects—discovery through shipping.
 5. FAST National University — Teaching Assistant, Data Structures (Aug–Dec 2024). Supported 50+ students, built grading tooling in Python, ~25% improvement in cohort metrics.
 6. Executive Council Network — Tech Advisor & Branding Consultant (May–Dec 2023, Remote). UI/UX upgrades, WCAG 2.1, React+Tailwind frontends, Node/Express APIs with JWT.
 7. Upwork — Web Developer Freelance (Sep 2022–Jul 2023, Remote). Full-stack across React, Vue, Node, Flask with SQL/NoSQL, OAuth, CI/CD.
