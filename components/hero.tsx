@@ -130,7 +130,7 @@ export default function Hero() {
         <div className="shrink-0">
           <div className="section-surface relative overflow-hidden rounded-full border border-border p-0.5">
             <Image
-              src="/images/shozab-profile.jpg"
+              src="/images/shozab-profile.png"
               alt="Shozab Mehdi"
               width={112}
               height={112}

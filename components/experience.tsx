@@ -27,6 +27,22 @@ const experiences = [
     tags: ["Engineering", "Full-time"],
   },
   {
+    company: "FarmTriage",
+    title: "Freelance Software Engineer",
+    location: "Canada · Remote",
+    duration: "May 2026",
+    summary: (
+      <>
+        Built an <strong className="font-semibold text-foreground">AI-powered feature</strong> for automated field boundary mapping for precision farming workflows.
+      </>
+    ),
+    bullets: [
+      "Improved field-boundary delineation accuracy from 59% to 87% after integrating a U-Net segmentation model on Sentinel-2 imagery.",
+      "Shipped VRA prescription-export pipelines compatible with three major drone platforms (DJI Agras, EAVision, XAG) for precision-agriculture workflows.",
+    ],
+    tags: ["AI", "U-Net", "Sentinel-2", "Drones", "Freelance"],
+  },
+  {
     company: "Neospark Solutions",
     title: "Software Development Intern",
     location: "Australia · Remote",

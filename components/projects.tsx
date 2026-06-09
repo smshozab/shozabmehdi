@@ -42,7 +42,10 @@ const projects: Project[] = [
       "Research-driven approach under faculty supervision with conference exposure.",
     ],
     tags: ["AIoT", "Python", "Machine Learning", "Aquaculture", "Research"],
-    links: [{ label: "Live", href: "https://aquagrid.tech" }],
+    links: [
+      { label: "Web Link", href: "https://aquagrid.tech" },
+      { label: "App", href: "https://app.aquagrid.tech/" },
+    ],
   },
   {
     title: "DeepCV.ai",
@@ -77,7 +80,49 @@ const projects: Project[] = [
       "Hybrid anomaly detection paired with LLM-driven risk narratives.",
     ],
     tags: ["React", "Supabase", "Gemini AI", "Isolation Forest", "FinTech"],
-    links: [],
+    links: [{ label: "GitHub", href: "https://github.com/smshozab/RiskLens-AI" }],
+  },
+  {
+    title: "Sawari.ai",
+    category: "AI / Computer Vision",
+    period: "2026",
+    summary: (
+      <>
+        <strong className="font-semibold text-foreground">Vehicle Inspections with AI</strong>—instantly detect damage, estimate costs, and generate professional reports using advanced AI technology.
+      </>
+    ),
+    bullets: [
+      "AI-powered damage detection for vehicle inspections.",
+      "Automated cost estimation based on detected damage.",
+      "Professional report generation using advanced AI technology.",
+    ],
+    tags: ["AI", "Computer Vision", "Vehicle Inspection", "Deep Learning"],
+    links: [
+      { label: "GitHub", href: "https://github.com/SameerVers3/Sawari.Ai" },
+      { label: "Live", href: "https://sawari-ai.vercel.app/" },
+    ],
+  },
+  {
+    title: "MetaCore",
+    category: "AI / Research",
+    period: "2026",
+    summary: (
+      <>
+        AI-powered <strong className="font-semibold text-foreground">meta-analysis platform</strong> featuring an intelligent analysis goal-based agent for structured reasoning over clinical datasets.
+        Automated effect-size computation (OR, RR, MD), heterogeneity detection, and interactive statistical visualizations (forest plots, bias analysis).
+      </>
+    ),
+    bullets: [
+      "Intelligent analysis goal-based agent for structured reasoning over clinical datasets.",
+      "Automated effect-size computation (Odds Ratio, Risk Ratio, Mean Difference).",
+      "Heterogeneity detection and interactive statistical visualizations.",
+      "Forest plots and bias analysis to support data-driven research decision-making.",
+    ],
+    tags: ["AI", "Meta-Analysis", "Clinical Research", "Statistics", "Python"],
+    links: [
+      { label: "GitHub", href: "https://github.com/smshozab/MetaCore" },
+      { label: "Live", href: "https://metacore-blue.vercel.app/" },
+    ],
   },
   {
     title: "ewastify",
