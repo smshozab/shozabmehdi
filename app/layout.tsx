@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SiteShell } from "@/components/site-shell"
@@ -47,6 +48,7 @@ export default function RootLayout({
             <SiteShell>{children}</SiteShell>
           </div>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
