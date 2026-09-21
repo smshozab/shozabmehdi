@@ -55,9 +55,9 @@ LinkedIn: linkedin.com/in/shozab-mehdi
 ---`
 
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.GROQ_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: "Groq API key not configured" }), {
+    return new Response(JSON.stringify({ error: "Gemini API key not configured" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     })
@@ -73,26 +73,52 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    const last5 = messages.slice(-5)
+    const last5 = messages
+      .slice(-5)
+      .filter(
+        (message: unknown): message is { role: "user" | "assistant"; content: string } => {
+          if (typeof message !== "object" || message === null) return false
 
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+          const candidate = message as Record<string, unknown>
+          return (
+            (candidate.role === "user" || candidate.role === "assistant") &&
+            typeof candidate.content === "string"
+          )
+        },
+      )
+
+    const contents = last5.map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    }))
+
+    // Gemini chat history should begin with a user turn.
+    if (contents[0]?.role === "model") contents.shift()
+
+    const res = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: SYSTEM_PROMPT }],
+          },
+          contents,
+          generationConfig: {
+            temperature: 0.6,
+            maxOutputTokens: 400,
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...last5],
-        stream: true,
-        temperature: 0.6,
-        max_tokens: 400,
-      }),
-    })
+    )
 
     if (!res.ok) {
       const err = await res.text()
-      return new Response(JSON.stringify({ error: `Groq API error: ${res.status}`, detail: err }), {
+      return new Response(JSON.stringify({ error: `Gemini API error: ${res.status}`, detail: err }), {
         status: res.status,
         headers: { "Content-Type": "application/json" },
       })

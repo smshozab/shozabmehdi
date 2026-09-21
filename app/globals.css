@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+section[id],
+header[id] {
+  scroll-margin-top: 6rem;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* Light-first minimal palette */

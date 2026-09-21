@@ -43,9 +43,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <main className="min-h-screen bg-background">
+          <div className="bg-background">
             <SiteShell>{children}</SiteShell>
-          </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

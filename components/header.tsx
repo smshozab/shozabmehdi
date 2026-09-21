@@ -5,11 +5,11 @@ import Link from "next/link"
 import { Github, Linkedin, Mail, Menu, X } from "lucide-react"
 
 const navigation = [
-  { name: "about", href: "/about" },
-  { name: "profile", href: "/profile" },
-  { name: "achievements", href: "/achievements" },
-  { name: "research", href: "/research" },
-  { name: "contact", href: "/contact" },
+  { name: "about", href: "/#about" },
+  { name: "profile", href: "/#profile" },
+  { name: "achievements", href: "/#achievements" },
+  { name: "research", href: "/#research" },
+  { name: "contact", href: "/#contact" },
 ]
 
 const social = [

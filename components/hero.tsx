@@ -85,7 +85,9 @@ export default function Hero() {
 
             try {
               const parsed = JSON.parse(data)
-              const delta = parsed.choices?.[0]?.delta?.content
+              const delta = parsed.candidates?.[0]?.content?.parts
+                ?.map((part: { text?: string }) => part.text || "")
+                .join("")
               if (delta) {
                 accumulated += delta
                 setMessages((prev) => {
