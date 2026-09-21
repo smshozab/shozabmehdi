@@ -14,21 +14,22 @@ Final-year CS student at FAST National University (NUCES), Karachi. Focus: TypeS
 - Dean's List Spring 2024, ICPC Finalist 2024
 
 ## Experience (newest first)
-1. Inferifi — Software Engineering Trainee (Nov 2025–Present, Illinois US, Remote). Full-time production engineering.
-2. FarmTriage — Freelance Software Engineer (May 2026, Canada, Remote). Built AI-powered automated field boundary mapping on Sentinel-2 imagery (U-Net model, 59% to 87% accuracy) and prescription-export pipelines for DJI, EAVision, and XAG drones.
-3. Neospark Solutions — Software Development Intern (Nov 2025–Jan 2026, Australia, Remote). MERN stack for deepcv.ai, Azure CI/CD, LLM integration, RESTful APIs.
-4. 10Pearls — Full Stack Developer Intern (Sep–Nov 2025, Karachi, Hybrid). Built Notely (MERN), AI chatbot, CI/CD, PinoLogger, SonarQube.
-5. Passion & freelance product work — Product Engineer (Jan 2025–Present, Remote). Product engineering across edtech, medical, agriculture, aquaculture, and blockchain projects—discovery through shipping.
-6. FAST National University — Teaching Assistant, Data Structures (Aug–Dec 2024). Supported 50+ students, built grading tooling in Python, ~25% improvement in cohort metrics.
-7. Executive Council Network — Tech Advisor & Branding Consultant (May–Dec 2023, Remote). UI/UX upgrades, WCAG 2.1, React+Tailwind frontends, Node/Express APIs with JWT.
-8. Upwork — Web Developer Freelance (Sep 2022–Jul 2023, Remote). Full-stack across React, Vue, Node, Flask with SQL/NoSQL, OAuth, CI/CD.
+1. BeyondMeta — Technical Co-Founder (2026–Present, Remote). Co-founded and architected the full technical stack for an AI-assisted, R-validated meta-analysis platform: study-data ingestion, AI-assisted CSV/XLSX cleanup and field mapping, data-health checks, analysis-plan approval, the analysis workbench, deterministic R/metafor statistics, forest and funnel plots, bias analysis, and reproducibility exports with exact R scripts. Live: www.beyondmeta.tech
+2. Inferifi — Software Engineering Trainee (Nov 2025–Present, Illinois US, Remote). Full-time production engineering.
+3. FarmTriage — Freelance Software Engineer (May 2026, Canada, Remote). Built AI-powered automated field boundary mapping on Sentinel-2 imagery (U-Net model, 59% to 87% accuracy) and prescription-export pipelines for DJI, EAVision, and XAG drones.
+4. Neospark Solutions — Software Development Intern (Nov 2025–Jan 2026, Australia, Remote). MERN stack for deepcv.ai, Azure CI/CD, LLM integration, RESTful APIs.
+5. 10Pearls — Full Stack Developer Intern (Sep–Nov 2025, Karachi, Hybrid). Built Notely (MERN), AI chatbot, CI/CD, PinoLogger, SonarQube.
+6. Passion & freelance product work — Product Engineer (Jan 2025–Present, Remote). Product engineering across edtech, medical, agriculture, aquaculture, and blockchain projects—discovery through shipping.
+7. FAST National University — Teaching Assistant, Data Structures (Aug–Dec 2024). Supported 50+ students, built grading tooling in Python, ~25% improvement in cohort metrics.
+8. Executive Council Network — Tech Advisor & Branding Consultant (May–Dec 2023, Remote). UI/UX upgrades, WCAG 2.1, React+Tailwind frontends, Node/Express APIs with JWT.
+9. Upwork — Web Developer Freelance (Sep 2022–Jul 2023, Remote). Full-stack across React, Vue, Node, Flask with SQL/NoSQL, OAuth, CI/CD.
 
 ## Projects
 1. AquaGrid (FYP, In progress) — AI-powered tools for aquaculture & marine science. Supervised by Dr. Muhammad Farrukh Shahid. Presented at National Centre of Physics (AITec-NCP). Live: aquagrid.tech, App: app.aquagrid.tech
 2. DeepCV.ai (2026) — React + Node.js on Azure with CI/CD pipelines. Live: deepcv.ai
 3. Risk Lens AI (2026) — Credit risk tool using React, Supabase, Gemini AI, Isolation Forest anomaly detection, LLM risk explanations. GitHub: github.com/smshozab/RiskLens-AI
 4. Sawari.ai (2026) — Vehicle Inspections with AI. Instantly detect damage, estimate costs, and generate professional reports using advanced AI technology. GitHub: github.com/SameerVers3/Sawari.Ai, Live: sawari-ai.vercel.app
-5. MetaCore (2026) — AI-powered meta-analysis platform featuring an intelligent analysis goal-based agent for structured reasoning over clinical datasets. Automated effect-size computation (OR, RR, MD), heterogeneity detection, and interactive statistical visualizations (forest plots, bias analysis). GitHub: github.com/smshozab/MetaCore, Live: metacore-blue.vercel.app
+5. BeyondMeta (2026) — AI-powered meta-analysis platform featuring an intelligent analysis goal-based agent for structured reasoning over clinical datasets. Automated effect-size computation (OR, RR, MD), heterogeneity detection, and interactive statistical visualizations (forest plots, bias analysis). Live: www.beyondmeta.tech
 6. ewastify (2025) — E-waste logistics platform: Vite+React, Express, MongoDB, Firebase, live routing via Maps API.
 7. Field Matrix (2024) — Smart farming research: CNN-based inter-crop spacing modeling, 85%+ accuracy. Supervised by Dr. Muhammad Farrukh Shahid.
 8. FAST-StudyCircle (2024) — MERN app matching juniors with verified seniors for coursework help.

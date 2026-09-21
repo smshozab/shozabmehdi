@@ -14,6 +14,23 @@ import {
 
 const experiences = [
   {
+    company: "BeyondMeta",
+    title: "Technical Co-Founder",
+    location: "Remote",
+    duration: "2026 – Present",
+    summary: (
+      <>
+        Co-founded and architected the full technical stack for an <strong className="font-semibold text-foreground">AI-assisted, R-validated meta-analysis platform</strong> that turns structured study data into defensible, reproducible results without requiring researchers to write code.
+      </>
+    ),
+    bullets: [
+      "Engineered study-data ingestion, AI-assisted CSV/XLSX cleanup and field mapping, data-health checks, analysis-plan approval, and the end-to-end analysis workbench.",
+      "Integrated deterministic R/metafor workflows for pooled estimates, confidence intervals, heterogeneity statistics, forest and funnel plots, and bias analysis.",
+      "Built transparent reproducibility exports containing source data, plots, and the exact R scripts behind every computed result.",
+    ],
+    tags: ["Technical Co-Founder", "Full-stack", "AI", "R", "metafor", "Data pipelines", "Reproducibility"],
+  },
+  {
     company: "Inferifi",
     title: "Software Engineering Trainee",
     location: "Illinois, US · Remote",

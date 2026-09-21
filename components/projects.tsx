@@ -103,7 +103,7 @@ const projects: Project[] = [
     ],
   },
   {
-    title: "MetaCore",
+    title: "BeyondMeta",
     category: "AI / Research",
     period: "2026",
     summary: (
@@ -119,10 +119,7 @@ const projects: Project[] = [
       "Forest plots and bias analysis to support data-driven research decision-making.",
     ],
     tags: ["AI", "Meta-Analysis", "Clinical Research", "Statistics", "Python"],
-    links: [
-      { label: "GitHub", href: "https://github.com/smshozab/MetaCore" },
-      { label: "Live", href: "https://metacore-blue.vercel.app/" },
-    ],
+    links: [{ label: "Live", href: "https://www.beyondmeta.tech/" }],
   },
   {
     title: "ewastify",
