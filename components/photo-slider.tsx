@@ -39,7 +39,7 @@ export default function PhotoSlider() {
 
   return (
     <>
-      <div className="relative -mx-6 overflow-hidden sm:-mx-10 lg:-mx-16">
+      <div className="relative overflow-hidden rounded-2xl" aria-label="Moments from competitions and community events">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-background to-transparent sm:w-20" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent sm:w-20" />
 
@@ -49,7 +49,7 @@ export default function PhotoSlider() {
               key={`${img.src}-${i}`}
               type="button"
               onClick={() => setLightbox(img)}
-              className="group relative h-32 w-48 shrink-0 overflow-hidden rounded-xl border border-border/50 bg-muted/20 transition-all duration-200 hover:border-foreground/20 hover:shadow-md sm:h-40 sm:w-56"
+              className="group relative h-24 w-36 shrink-0 overflow-hidden rounded-xl border border-border/50 bg-muted/20 transition-all duration-200 hover:border-foreground/20 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-28 sm:w-40"
             >
               <Image
                 src={img.src}
@@ -59,7 +59,7 @@ export default function PhotoSlider() {
                   "object-cover transition-transform duration-300 group-hover:scale-105",
                   img.crop && "scale-[1.25] object-center",
                 )}
-                sizes="224px"
+                sizes="160px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
               <span className="absolute inset-x-0 bottom-0 translate-y-1 px-2 pb-2 text-left text-[10px] leading-tight text-white opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">

@@ -1,16 +1,6 @@
 "use client"
 
-import { useSectionReveal } from "@/hooks/use-section-reveal"
-import {
-  TimelineBody,
-  TimelineBulletList,
-  TimelineDate,
-  TimelineEntry,
-  TimelineMeta,
-  TimelinePrimary,
-  TimelineRole,
-  TimelineTags,
-} from "@/components/profile-timeline"
+import { ChevronDown, GraduationCap } from "lucide-react"
 
 const leadership = [
   "Dev Deputy — ACM (Association for Computing Machinery)",
@@ -32,43 +22,37 @@ const highlights = [
 ]
 
 export default function Education() {
-  const { sectionRef, fade } = useSectionReveal()
-
   return (
-    <section id="education" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
-      <div style={fade(0)}>
-        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Education</h2>
-        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">
-          Degree, leadership, and coursework in one thread.
+    <section id="education" aria-label="Education">
+      <p className="mb-5 text-sm text-muted-foreground">A CS foundation, with plenty of learning outside the classroom.</p>
+      <article className="rounded-2xl border border-border/80 bg-card/60 p-5 sm:p-6">
+        <div className="flex items-start gap-4">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-background"><GraduationCap className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} aria-hidden /></span>
+          <div><h3 className="text-lg font-semibold tracking-tight">FAST National University</h3><p className="mt-1 text-sm text-muted-foreground">Bachelor of Science in Computer Science</p><p className="mt-2 text-xs text-muted-foreground">2022 – 2026 · Graduated · Karachi, Pakistan</p></div>
+        </div>
+        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Leadership across ACM, GDSC, and Hackops, alongside competitions and building tools for the campus community.
         </p>
-      </div>
-
-      <div className="mt-10" style={fade(70)}>
-        <TimelineEntry isLast>
-          <TimelineDate>2022 – 2026 · IN PROGRESS</TimelineDate>
-          <TimelinePrimary>FAST National University</TimelinePrimary>
-          <TimelineRole>Bachelor of Science in Computer Science</TimelineRole>
-          <TimelineMeta>Karachi, Pakistan</TimelineMeta>
-          <TimelineBody>
-            Rigorous CS foundation with heavy emphasis on systems, math, and software engineering practice. Outside
-            lectures, most of my energy goes to{" "}
+        <div className="mt-4 flex flex-wrap gap-2">{highlights.map((highlight) => <span key={highlight} className="rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">{highlight}</span>)}</div>
+        <details className="group mt-5 border-t border-border/60 pt-3">
+          <summary className="flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">More about my education<ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden /></summary>
+          <div className="pt-3 text-sm leading-relaxed text-muted-foreground">
+            <p className="max-w-2xl">
+            My degree gave me a rigorous CS foundation with heavy emphasis on systems, math, and software engineering practice. Outside
+            lectures, I put my energy into{" "}
             <strong className="font-semibold text-foreground">student societies</strong>,{" "}
             <strong className="font-semibold text-foreground">competitions</strong>, and{" "}
             <strong className="font-semibold text-foreground">shipping real tools</strong> for peers and orgs on campus.
-          </TimelineBody>
+            </p>
 
           <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Leadership &amp; activities</p>
-          <TimelineBulletList items={leadership} />
+          <ul className="mt-3 list-disc space-y-2 pl-5">{leadership.map((item) => <li key={item}>{item}</li>)}</ul>
 
           <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Relevant coursework</p>
-          <TimelineBulletList items={coursework} />
-
-          <p className="mt-6 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Academic highlights</p>
-          <TimelineBulletList items={highlights} />
-
-          <TimelineTags tags={["FAST NUCES", "Karachi", "BS Computer Science", "2026"]} />
-        </TimelineEntry>
-      </div>
+          <ul className="mt-3 list-disc space-y-2 pl-5">{coursework.map((item) => <li key={item}>{item}</li>)}</ul>
+          </div>
+        </details>
+      </article>
     </section>
   )
 }

@@ -24,12 +24,12 @@ export const metadata: Metadata = {
     template: "%s | Shozab Mehdi",
   },
   description:
-    "Portfolio of Shozab Mehdi - Full-Stack Developer and Machine Learning enthusiast. Computer Science student at FAST NUCES with experience in MERN stack, blockchain, and AI projects.",
+    "Portfolio of Shozab Mehdi - Full-Stack Developer and Machine Learning enthusiast. Fresh Computer Science graduate from FAST NUCES with experience in MERN stack, blockchain, and AI projects.",
   keywords: "Shozab Mehdi, Computer Science, Full Stack Developer, Machine Learning, AI, FAST NUCES, Portfolio",
   authors: [{ name: "Shozab Mehdi" }],
   openGraph: {
     title: "Shozab Mehdi — Portfolio",
-    description: "Computer Science Student | Software Engineer | AI Enthusiast",
+    description: "Computer Science Graduate | Software Engineer | AI Enthusiast",
     type: "website",
   },
     generator: 'v0.app'

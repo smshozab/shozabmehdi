@@ -1,16 +1,12 @@
 "use client"
 
-import { useSectionReveal } from "@/hooks/use-section-reveal"
-import {
-  TimelineBody,
-  TimelineBulletList,
-  TimelineDate,
-  TimelineEntry,
-  TimelineMeta,
-  TimelinePrimary,
-  TimelineRole,
-  TimelineTags,
-} from "@/components/profile-timeline"
+import { useState } from "react"
+import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react"
+
+const relatedProjects: Record<string, { title: string; href: string }> = {
+  BeyondMeta: { title: "BeyondMeta", href: "#project-beyondmeta" },
+  "Neospark Solutions": { title: "DeepCV.ai", href: "#project-deepcv-ai" },
+}
 
 const experiences = [
   {
@@ -174,28 +170,37 @@ const experiences = [
 ]
 
 export default function Experience() {
-  const { sectionRef, fade } = useSectionReveal()
+  const [showAll, setShowAll] = useState(false)
+  const visibleExperiences = showAll ? experiences : experiences.slice(0, 2)
 
   return (
-    <section id="experience" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
-      <div style={fade(0)}>
-        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Experience</h2>
-        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">Roles in engineering, product, teaching, and consulting—newest first.</p>
-      </div>
-
-      <div className="mt-10 space-y-0" style={fade(60)}>
-        {experiences.map((exp, i) => (
-          <TimelineEntry key={exp.company + exp.duration} isLast={i === experiences.length - 1}>
-            <TimelineDate>{exp.duration.toUpperCase()}</TimelineDate>
-            <TimelinePrimary>{exp.company}</TimelinePrimary>
-            <TimelineRole>{exp.title}</TimelineRole>
-            <TimelineMeta>{exp.location}</TimelineMeta>
-            <TimelineBody>{exp.summary}</TimelineBody>
-            <TimelineBulletList items={exp.bullets} />
-            <TimelineTags tags={exp.tags} />
-          </TimelineEntry>
+    <section id="experience" aria-label="Work experience">
+      <p className="mb-5 text-sm text-muted-foreground">The teams and products I&apos;ve helped move forward.</p>
+      <div id="experience-list" className="space-y-3">
+        {visibleExperiences.map((exp) => (
+          <article key={exp.company + exp.duration} className="rounded-2xl border border-border/80 bg-card/60 p-5 sm:p-6">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+              <div><h3 className="text-base font-semibold tracking-tight">{exp.company}</h3><p className="mt-1 text-sm text-muted-foreground">{exp.title}</p></div>
+              <p className="shrink-0 text-xs text-muted-foreground sm:pt-1">{exp.duration}</p>
+            </div>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{exp.summary}</p>
+            <details className="group mt-4 border-t border-border/60 pt-3">
+              <summary className="flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+                Role details <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden />
+              </summary>
+              <div className="pt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="text-xs">{exp.location}</p>
+                {exp.bullets.length > 0 && <ul className="mt-3 list-disc space-y-2 pl-5">{exp.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
+                <p className="mt-4 text-xs">{exp.tags.join(" · ")}</p>
+                {relatedProjects[exp.company] && <a href={relatedProjects[exp.company].href} className="mt-3 inline-flex min-h-10 items-center gap-1.5 rounded-md font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Explore {relatedProjects[exp.company].title}<ArrowUpRight className="h-4 w-4" aria-hidden /></a>}
+              </div>
+            </details>
+          </article>
         ))}
       </div>
+      <button type="button" onClick={() => setShowAll(!showAll)} aria-expanded={showAll} aria-controls="experience-list" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-4 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {showAll ? "Show recent roles" : "Show 7 earlier roles"}<ArrowDown className={`h-4 w-4 transition-transform motion-reduce:transition-none ${showAll ? "rotate-180" : ""}`} aria-hidden />
+      </button>
     </section>
   )
 }

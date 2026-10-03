@@ -2,7 +2,8 @@
 @import "tw-animate-css";
 
 section[id],
-header[id] {
+header[id],
+article[id] {
   scroll-margin-top: 6rem;
 }
 

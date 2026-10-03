@@ -110,7 +110,7 @@ export default function Achievements() {
 
   return (
     <>
-      <section id="achievements" ref={sectionRef} className="pb-16 pt-14 sm:pb-20">
+      <section id="achievements" ref={sectionRef} className="pb-10 pt-8 sm:pb-12">
         <div style={fade(0)}>
           <h2 className="flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             Achievements
@@ -119,7 +119,7 @@ export default function Achievements() {
             </span>
           </h2>
           <p className="mt-2 max-w-md text-sm text-muted-foreground sm:text-[15px]">
-            By year—scan the chips, click the photos.
+            A few milestones, and the people and moments behind them.
           </p>
         </div>
 

@@ -9,7 +9,7 @@ const highlights = [
   {
     emoji: "🎓",
     title: "FAST NUCES",
-    line: "Final-year CS · leadership across ACM, GDSC & Hackops.",
+    line: "Fresh CS graduate · leadership across ACM, GDSC & Hackops.",
   },
   {
     emoji: "⚙️",

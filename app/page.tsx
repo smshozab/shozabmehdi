@@ -1,6 +1,5 @@
 import Hero from "@/components/hero"
 import PhotoSlider from "@/components/photo-slider"
-import About from "@/components/about"
 import { ProfileIntro } from "@/components/profile-intro"
 import { ProfileTabs } from "@/components/profile-tabs"
 import Achievements from "@/components/achievements"
@@ -12,7 +11,6 @@ export default function Home() {
     <>
       <Hero />
       <PhotoSlider />
-      <About />
       <ProfileIntro />
       <ProfileTabs />
       <Achievements />

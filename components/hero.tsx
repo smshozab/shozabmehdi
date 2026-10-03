@@ -1,8 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowUpRight, Loader2 } from "lucide-react"
+import { ArrowUpRight, ChevronDown, Loader2, MessageCircle } from "lucide-react"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { useRef, useState, useEffect, useCallback } from "react"
 import { useSectionReveal } from "@/hooks/use-section-reveal"
 import { cn } from "@/lib/utils"
@@ -17,6 +17,7 @@ const quickPrompts = [
 type Message = { role: "user" | "assistant"; content: string }
 
 export default function Hero() {
+  const [chatOpen, setChatOpen] = useState(false)
   const [draft, setDraft] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const [streaming, setStreaming] = useState(false)
@@ -25,7 +26,8 @@ export default function Hero() {
   const abortRef = useRef<AbortController | null>(null)
 
   const scrollToBottom = useCallback(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    const container = chatEndRef.current?.parentElement
+    if (container) container.scrollTop = container.scrollHeight
   }, [])
 
   useEffect(scrollToBottom, [messages, scrollToBottom])
@@ -122,14 +124,14 @@ export default function Hero() {
   const hasChat = messages.length > 0
 
   return (
-    <section id="home" ref={sectionRef} className="relative pb-16 pt-10 sm:pb-20 sm:pt-14">
+    <section id="home" ref={sectionRef} className="relative pb-8 pt-10 sm:pb-10 sm:pt-14">
       <div
         className="pointer-events-none absolute right-0 top-16 h-28 w-28 rounded-full border border-dashed border-border/45 opacity-35 section-orbit-ring max-sm:hidden"
         aria-hidden
       />
 
-      <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:gap-12" style={fade(0)}>
-        <div className="shrink-0">
+      <div id="about" className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8" style={fade(0)}>
+        <div className="shrink-0 self-start">
           <div className="section-surface relative overflow-hidden rounded-full border border-border p-0.5">
             <Image
               src="/images/shozab-profile.png"
@@ -142,19 +144,32 @@ export default function Hero() {
           </div>
         </div>
         <div className="min-w-0 flex-1 space-y-4">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Developer · Builder · Curious about AI</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Hey, I&apos;m Shozab <span aria-hidden>👋</span>
           </h1>
           <p className="max-w-lg text-[15px] leading-relaxed text-muted-foreground sm:text-base">
-            CS @ FAST NUCES · full-stack · ML &amp; AI when it needs to ship for real users.
+            I&apos;m a fresh Computer Science graduate from FAST NUCES. I build useful software and explore how AI can help with real-world problems, with a soft spot for thoughtful products and clear systems.
           </p>
+          <p className="max-w-lg text-sm leading-relaxed text-muted-foreground"><span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-emerald-600" aria-hidden /><span className="font-medium text-foreground">Currently:</span> co-building BeyondMeta and exploring ML for aquatic and agricultural environments.</p>
+          <div className="flex flex-wrap items-center gap-5 pt-1">
+            <a href="#profile" className="inline-flex min-h-10 items-center gap-1.5 rounded-md text-sm font-medium underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Explore my work<ArrowUpRight className="h-4 w-4" aria-hidden /></a>
+            <a href="#contact" className="inline-flex min-h-10 items-center gap-1.5 rounded-md text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Let&apos;s connect</a>
+          </div>
         </div>
       </div>
 
-      <div
-        className="section-surface mt-12 rounded-2xl border border-border bg-card p-6 sm:p-8"
+      <Collapsible
+        open={chatOpen}
+        onOpenChange={setChatOpen}
+        className="group mt-7 rounded-2xl border border-border bg-card/50"
         style={fade(120)}
       >
+        <CollapsibleTrigger className="flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left text-sm hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&[data-state=open]>svg]:rotate-180">
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-1"><MessageCircle className="h-4 w-4 text-muted-foreground" aria-hidden /><span className="font-medium">Ask about my work</span><span className="text-xs text-muted-foreground">An AI guide to my profile</span></span>
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none" aria-hidden />
+        </CollapsibleTrigger>
+        <CollapsibleContent className="border-t border-border px-5 py-5 sm:px-6">
         {!hasChat && (
           <>
             <div className="flex gap-3">
@@ -270,7 +285,8 @@ export default function Hero() {
             ))}
           </div>
         )}
-      </div>
+        </CollapsibleContent>
+      </Collapsible>
     </section>
   )
 }

@@ -1,46 +1,77 @@
-import { Briefcase, GraduationCap, FolderKanban } from "lucide-react"
+"use client"
+
+import { useEffect, useState } from "react"
+import { Briefcase, GraduationCap, FolderKanban, GitBranch } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Experience from "@/components/experience"
 import Education from "@/components/education"
 import Projects from "@/components/projects"
+import OpenSource from "@/components/open-source"
 
 const tabs = [
-  { id: "experience", label: "Experience", icon: Briefcase, description: "Roles & internships" },
-  { id: "education", label: "Education", icon: GraduationCap, description: "Degree & leadership" },
-  { id: "projects", label: "Projects", icon: FolderKanban, description: "Builds & research" },
+  { id: "projects", label: "Selected work", icon: FolderKanban },
+  { id: "open-source", label: "Open source", icon: GitBranch },
+  { id: "experience", label: "Experience", icon: Briefcase },
+  { id: "education", label: "Education", icon: GraduationCap },
 ] as const
 
 export function ProfileTabs() {
+  const [activeTab, setActiveTab] = useState("projects")
+  const [scrollTarget, setScrollTarget] = useState<string | null>(null)
+
+  useEffect(() => {
+    const followHash = () => {
+      const target = window.location.hash.slice(1)
+      const tab = target.startsWith("project-") ? "projects" : target
+      if (tabs.some((item) => item.id === tab)) {
+        setActiveTab(tab)
+        setScrollTarget(target)
+      }
+    }
+    followHash()
+    window.addEventListener("hashchange", followHash)
+    return () => window.removeEventListener("hashchange", followHash)
+  }, [])
+
+  useEffect(() => {
+    if (!scrollTarget) return
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(scrollTarget)?.scrollIntoView({ block: "start" })
+      setScrollTarget(null)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [activeTab, scrollTarget])
+
   return (
-    <div>
-      <nav className="grid grid-cols-3 gap-3 sm:gap-4" aria-label="Profile sections">
+    <Tabs value={activeTab} onValueChange={(value) => {
+      setActiveTab(value)
+      window.history.replaceState(null, "", `#${value}`)
+    }} className="gap-6 pb-8">
+      <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-xl border border-border/70 bg-muted/40 p-1 sm:grid-cols-4" aria-label="Explore my profile">
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (
-            <a
+            <TabsTrigger
               key={tab.id}
-              href={`#${tab.id}`}
-              className="group relative flex flex-col items-center gap-2 rounded-2xl border border-border/60 bg-card/40 p-4 text-center transition-all duration-200 hover:border-border hover:bg-card/70 hover:shadow-sm sm:p-5"
+              value={tab.id}
+              className="min-h-11 min-w-0 gap-2 rounded-lg px-1 py-3 text-xs text-muted-foreground data-[state=active]:text-foreground sm:px-2 sm:text-sm"
             >
               <Icon
-                className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-foreground/70"
+                className="hidden h-4 w-4 text-muted-foreground sm:block"
                 strokeWidth={1.5}
+                aria-hidden
               />
-              <span className="text-sm font-medium text-muted-foreground transition-colors group-hover:text-foreground/80">
+              <span>
                 {tab.label}
               </span>
-              <span className="hidden text-[11px] text-muted-foreground sm:block">
-                {tab.description}
-              </span>
-            </a>
+            </TabsTrigger>
           )
         })}
-      </nav>
-
-      <div className="mt-2">
-        <Experience />
-        <Education />
-        <Projects />
-      </div>
-    </div>
+      </TabsList>
+      <TabsContent value="projects" className="mt-0"><Projects /></TabsContent>
+      <TabsContent value="open-source" className="mt-0"><OpenSource /></TabsContent>
+      <TabsContent value="experience" className="mt-0"><Experience /></TabsContent>
+      <TabsContent value="education" className="mt-0"><Education /></TabsContent>
+    </Tabs>
   )
 }

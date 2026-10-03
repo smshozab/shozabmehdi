@@ -1,35 +1,17 @@
 "use client"
 
-import type React from "react"
-import { useSectionReveal } from "@/hooks/use-section-reveal"
-import {
-  TimelineBody,
-  TimelineBulletList,
-  TimelineDate,
-  TimelineEntry,
-  TimelineLinks,
-  TimelineMeta,
-  TimelinePrimary,
-  TimelineRole,
-  TimelineTags,
-} from "@/components/profile-timeline"
-
-type Project = {
-  title: string
-  category: string
-  period: string
-  meta?: string
-  summary: React.ReactNode
-  bullets: string[]
-  tags: string[]
-  links: { label: string; href: string }[]
-}
+import { useEffect, useState } from "react"
+import { ArrowDown } from "lucide-react"
+import { ProjectCard, projectId, type Project } from "@/components/project-card"
+import { openSourceProjects } from "@/lib/open-source-work"
 
 const projects: Project[] = [
+  ...openSourceProjects,
   {
     title: "AquaGrid",
-    category: "RnD FYP / AIoT",
-    period: "In progress",
+    preview: "Research-led monitoring tools for aquaculture and aquatic ecosystems.",
+    category: "Research / AIoT",
+    period: "2025",
     meta: "Supervision: Dr. Muhammad Farrukh Shahid",
     summary: (
       <>
@@ -49,6 +31,7 @@ const projects: Project[] = [
   },
   {
     title: "DeepCV.ai",
+    preview: "Full-stack product delivery with cloud infrastructure and automated deployments.",
     category: "Full stack / Cloud",
     period: "2026",
     summary: (
@@ -67,6 +50,7 @@ const projects: Project[] = [
   },
   {
     title: "Risk Lens AI",
+    preview: "Turning financial documents into credit-risk metrics and understandable explanations.",
     category: "AI / FinTech",
     period: "2026",
     summary: (
@@ -84,6 +68,7 @@ const projects: Project[] = [
   },
   {
     title: "Sawari.ai",
+    preview: "Vehicle damage detection, cost estimates, and inspection reports powered by AI.",
     category: "AI / Computer Vision",
     period: "2026",
     summary: (
@@ -104,6 +89,7 @@ const projects: Project[] = [
   },
   {
     title: "BeyondMeta",
+    preview: "Helping researchers turn study data into reproducible meta-analyses without writing code.",
     category: "AI / Research",
     period: "2026",
     summary: (
@@ -123,6 +109,7 @@ const projects: Project[] = [
   },
   {
     title: "ewastify",
+    preview: "Making e-waste pickups and dispatch easier with routing and operational dashboards.",
     category: "Full stack / Sustainability",
     period: "2025",
     summary: (
@@ -142,70 +129,72 @@ const projects: Project[] = [
     ],
   },
   {
-    title: "Field Matrix",
-    category: "Research / ML",
-    period: "2024",
-    meta: "Supervision: Dr. Muhammad Farrukh Shahid",
-    summary: (
-      <>
-        Research pipeline for <strong className="font-semibold text-foreground">smart farming</strong>: CNN-based modeling of{" "}
-        <strong className="font-semibold text-foreground">inter-crop spacing</strong> to inform yield decisions. Current models land north of{" "}
-        <strong className="font-semibold text-foreground">85% accuracy</strong> on the project&apos;s evaluation setup—tuning and field validation continue.
-      </>
-    ),
+    title: "AquaSense-Agent",
+    preview: "A multimodal diagnostic agent combining images, farmer descriptions, and sensor data for aquaculture.",
+    category: "Research / Agentic AI",
+    period: "Jun 2026",
+    summary: "Developed a fish-disease diagnostic agent that brings together visual, textual, and environmental inputs through Late Bayesian Fusion. A Continual RAG knowledge base and Supervisor Agent support context-aware routing and diagnosis.",
     bullets: [
-      "Python training stack with emphasis on reproducible experiments.",
-      "Computer-vision feature design for agricultural imagery.",
-      "Ongoing iteration toward deployable, interpretable outputs.",
+      "Combines fish images, farmer descriptions, and IoT sensor readings.",
+      "Uses Late Bayesian Fusion to combine evidence from the three modalities.",
+      "Routes queries with a Supervisor Agent backed by a Continual RAG knowledge base.",
     ],
-    tags: ["Python", "CNN", "Computer Vision", "Machine Learning", "Agriculture"],
-    links: [{ label: "GitHub", href: "https://github.com/smshozab/FieldMatrix" }],
+    tags: ["Multimodal AI", "RAG", "Bayesian Fusion", "IoT", "Aquaculture"],
+    links: [{ label: "GitHub", href: "https://github.com/smshozab/AG-AquaSense" }],
   },
   {
-    title: "FAST-StudyCircle",
-    category: "Full stack / Community",
-    period: "2024",
-    summary: (
-      <>
-        MERN app matching <strong className="font-semibold text-foreground">juniors with verified seniors</strong> for coursework help. Email confirmations via{" "}
-        <strong className="font-semibold text-foreground">Nodemailer</strong>, moderation hooks, and a focus on trust signals in the UI.
-      </>
-    ),
-    bullets: ["Matching logic and profile verification story.", "Transactional email and basic admin tooling."],
-    tags: ["MongoDB", "Express", "React", "Node.js", "Nodemailer"],
-    links: [
-      { label: "Walkthrough", href: "https://drive.google.com/drive/folders/1vmOowlPCljLVST7bI-Ai-ARG_tmD_YY6?usp=sharing" },
-      { label: "Code", href: "https://github.com/smshozab/FAST-StudyCircle" },
+    title: "EducationGlobal",
+    preview: "A coaching-management platform that brings everyday education operations into one place.",
+    category: "Full stack / EdTech",
+    period: "2026",
+    summary: "Co-created a Next.js platform for managing students, teachers, classes, attendance, and results. It serves 1,000+ team members across 8+ coaching organizations, replacing paperwork with end-to-end operational workflows.",
+    bullets: [
+      "Brings students, teachers, classes, attendance, and results into a shared platform.",
+      "Automates coaching operations that previously required days of manual paperwork.",
     ],
+    tags: ["Next.js", "EdTech", "Workflow automation"],
+    links: [{ label: "Live", href: "https://educationglobal.live/" }],
   },
 ]
 
+const featuredTitles = ["BeyondMeta", "TutorialFlowMCP", "HyperFrames Launch Video Engine"]
+const orderedProjects = [
+  ...featuredTitles.map((title) => projects.find((project) => project.title === title)!),
+  ...projects.filter((project) => !featuredTitles.includes(project.title)),
+]
+
 export default function Projects() {
-  const { sectionRef, fade } = useSectionReveal()
+  const [showAll, setShowAll] = useState(false)
+
+  useEffect(() => {
+    const revealLinkedProject = () => {
+      const target = window.location.hash.slice(1)
+      if (orderedProjects.slice(3).some((project) => projectId(project.title) === target)) {
+        setShowAll(true)
+        requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: "start" }))
+      }
+    }
+    revealLinkedProject()
+    window.addEventListener("hashchange", revealLinkedProject)
+    return () => window.removeEventListener("hashchange", revealLinkedProject)
+  }, [])
+
+  const visibleProjects = showAll ? orderedProjects : orderedProjects.slice(0, 3)
 
   return (
-    <section id="projects" ref={sectionRef} className="pb-16 pt-4 sm:pb-20">
-      <div style={fade(0)}>
-        <h2 className="text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">Projects</h2>
-        <p className="mt-2 max-w-lg text-sm text-muted-foreground sm:text-[15px]">
-          Selected builds—research, product, and experiments—with links where they&apos;re public.
-        </p>
+    <section id="projects" aria-label="Selected projects">
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <p className="text-sm text-muted-foreground">A few builds I&apos;d love you to explore.</p>
+        <span className="shrink-0 font-mono text-[11px] text-muted-foreground">{String(visibleProjects.length).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>
       </div>
-
-      <div className="mt-10 space-y-0" style={fade(70)}>
-        {projects.map((p, i) => (
-          <TimelineEntry key={p.title} isLast={i === projects.length - 1}>
-            <TimelineDate>{p.period.toUpperCase()}</TimelineDate>
-            <TimelinePrimary>{p.title}</TimelinePrimary>
-            <TimelineRole>{p.category}</TimelineRole>
-            {p.meta ? <TimelineMeta>{p.meta}</TimelineMeta> : null}
-            <TimelineBody>{p.summary}</TimelineBody>
-            <TimelineBulletList items={p.bullets} />
-            <TimelineTags tags={p.tags} />
-            <TimelineLinks links={p.links} />
-          </TimelineEntry>
+      <div id="project-grid" className="grid gap-4 sm:grid-cols-2">
+        {visibleProjects.map((project, index) => (
+          <ProjectCard key={project.title} id={projectId(project.title)} project={project} featured={index === 0} />
         ))}
       </div>
+      <button type="button" onClick={() => setShowAll(!showAll)} aria-expanded={showAll} aria-controls="project-grid" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-4 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {showAll ? "Back to selected work" : `View all ${projects.length} projects`}<ArrowDown className={`h-4 w-4 transition-transform motion-reduce:transition-none ${showAll ? "rotate-180" : ""}`} aria-hidden />
+      </button>
     </section>
   )
 }
